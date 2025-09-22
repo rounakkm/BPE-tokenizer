@@ -1,21 +1,15 @@
-from collections import Counter
 from typing import List, Dict, Tuple
+from collections import Counter
 
-
-def pair_gen(tokens: List[int]) -> Dict[Tuple[int, int], int]:                          """To counts how many times two tokens appear together"""
-    vocab = Counter()
-    for i in range(len(tokens) - 1):
-        vocab[(tokens[i], tokens[i + 1])] += 1
-    return dict(vocab)
-
-
-def most_freq(vocab: Dict[Tuple[int, int], int]) -> Tuple[int, int]:                   """Find the most frequent token pair"""
+def most_freq(vocab: Dict[Tuple[int, int], int]) -> Tuple[int, int]:
+    """Find the most frequent token pair"""
     if not vocab:
         return (0, 0)
     return max(vocab.items(), key=lambda x: x[1])[0]
 
 
-def merge_tokens(tokens: List[int], most_freq_pair: Tuple[int, int], new_token: int) -> List[int]:        """Replace most frequent pair with a new token"""
+def merge_tokens(tokens: List[int], most_freq_pair: Tuple[int, int], new_token: int) -> List[int]:
+    """Replace most frequent pair with a new token"""
     new_tokens = []
     i = 0
     while i < len(tokens):
@@ -32,7 +26,8 @@ def merge_tokens(tokens: List[int], most_freq_pair: Tuple[int, int], new_token: 
     return new_tokens
 
 
-def tokenize(tokens: List[int], vocab: Dict[Tuple[int, int], int], merge_count: int):                     """Performs bpe tokenization"""
+def tokenize(tokens: List[int], vocab: Dict[Tuple[int, int], int], merge_count: int):
+    """Performs BPE tokenization"""
     new_pairs_count = 1
     freq_map = pair_gen(tokens)
 
@@ -55,7 +50,8 @@ def tokenize(tokens: List[int], vocab: Dict[Tuple[int, int], int], merge_count: 
     return tokens, vocab
 
 
-def detokenize(tokens: List[int], lookup_table: Dict[int, Tuple[int, int]]) -> str:  """Reconstruct"""
+def detokenize(tokens: List[int], lookup_table: Dict[int, Tuple[int, int]]) -> str:
+    """Reconstruct"""
     found_merged = True
 
     while found_merged:
