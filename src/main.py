@@ -63,6 +63,8 @@ encoded_example_tokens = encode_text(example_text, vocab)
 # Detokenize example
 decoded_example = detokenize(encoded_example_tokens, lookup_table)
 
+# In output.txt example text is encoded and decoded at Line 5179 due to some reasons. 
+
 print(f"Training, tokenization, and detokenization done! Output saved to {output_file}")
 print("\n--- Example Encoding and Decoding ---")
 print(f"Original Text: {example_text}")
