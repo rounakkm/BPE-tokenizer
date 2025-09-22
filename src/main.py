@@ -1,31 +1,37 @@
 import pickle
+import json
 from tokenizer import tokenize, detokenize, pair_gen, most_freq, merge_tokens
 
 # File paths
 corpus_file = "alice.txt"
 output_file = "output.txt"
 
-
 with open(corpus_file, "r", encoding="utf-8") as f:
     text = f.read()
 tokens = [ord(c) for c in text]
 
 # Train tokenizer (set a large merge_count to get many merges)
-merge_count = 5000  
+merge_count = 5000 
 tokens, vocab = tokenize(tokens, {}, merge_count=merge_count)
 
 # Created lookup table
 lookup_table = {v: k for k, v in vocab.items()}
 
-# Save the vocab and tokens (opt)
+# Save the vocab and tokens (opt) (pickle files)
 with open("vocab.pkl", "wb") as f:
     pickle.dump(vocab, f)
 with open("tokens.pkl", "wb") as f:
     pickle.dump(tokens, f)
 
 
+# Save vocab.json (Vocabulary Storage)
+
+with open("vocab.json", "w", encoding="utf-8") as f:
+    json.dump({f"{k[0]},{k[1]}": v for k, v in vocab.items()}, f, indent=2)
+
+
 with open(output_file, "w", encoding="utf-8") as f:
-    # Write learnt vocabulary
+    # Learnt vocabulary
     f.write("Learnt Vocabulary\n\n")
     for k, v in vocab.items():
         f.write(f"({k[0]}, {k[1]}) -> {v}\n")
@@ -41,29 +47,28 @@ with open(output_file, "w", encoding="utf-8") as f:
     detok_text = detokenize(tokens, lookup_table)
     f.write(detok_text)
 
+
+# Encode & decode demo
+
 def encode_text(text: str, vocab: dict) -> list:
     """Encodes text using a pre-trained BPE vocabulary."""
     tokens = [ord(c) for c in text]
     
-
     sorted_merges = sorted(vocab.items(), key=lambda item: item[1])
     
-   
     for pair, new_token in sorted_merges:
         while pair_gen(tokens).get(pair):
             tokens = merge_tokens(tokens, pair, new_token)
     
     return tokens
 
-example_text = "A wizard is never late, Frodo Baggins. Nor is he early. He arrives precisely when he means to."
 
-# Encode example
-encoded_example_tokens = encode_text(example_text, vocab)
-
-# Detokenize example
-decoded_example = detokenize(encoded_example_tokens, lookup_table)
 
 # In output.txt example text is encoded and decoded at Line 5179 due to some reasons. 
+example_text = "A wizard is never late, Frodo Baggins. Nor is he early. He arrives precisely when he means to."
+
+encoded_example_tokens = encode_text(example_text, vocab)
+decoded_example = detokenize(encoded_example_tokens, lookup_table)
 
 print(f"Training, tokenization, and detokenization done! Output saved to {output_file}")
 print("\n--- Example Encoding and Decoding ---")
