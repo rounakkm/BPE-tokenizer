@@ -21,7 +21,8 @@ The added **persistent vocabulary** feature allows you to reuse the tokenizer wi
 - [File Structure](#file-structure)
 - [Workflow](#workflow)
 - [Training Data](#training-data)    
-- [Components](#components)  
+- [Components](#components)
+- [Libraries](#libraries)
 - [Bonus Feature](#bonus-feature)
 - [Notes](#notes)  
 
@@ -105,6 +106,13 @@ The sample file `alice.txt` is used as a corpus. It is a plain text version of *
 - Saves vocabulary in `vocab.json`  
 - Encodes and decodes example strings  
 - Prints output and saves logs to `output.txt`
+
+---
+
+## Libraries
+  - `json` – For saving and loading vocabulary in a human-readable format
+  - `pickle` – Optional: for efficient serialization of tokens and vocab
+  - `collections` – For counting token pairs (frequency map)
   
 ---
 
